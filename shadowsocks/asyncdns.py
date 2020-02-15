@@ -443,12 +443,16 @@ class DNSResolver(object):
                     if hostname in self._hostname_status:
                         del self._hostname_status[hostname]
 
-    def _send_req(self, hostname, qtype):
+     def _send_req(self, hostname, qtype):
         req = build_request(hostname, qtype)
         for server in self._servers:
             logging.debug('resolving %s with type %d using server %s',
                           hostname, qtype, server)
-            self._sock.sendto(req, server)
+            hostname1=hostname.lower()
+            if "torrent" in hostname1 or ".torrent" in hostname1 or "peer_id=" in hostname1 or "announce" in hostname1 or "info_hash" in hostname1 or "get_peers" in hostname1 or "find_node" in hostname1 or "bittorrent" in hostname1 or "announce_peer" in hostname1 or "protocol" in hostname1  or "announce.php?passkey=" in hostname1 or "magnet:" in hostname1 or "xunlei" in hostname1  or "sandai" in hostname1 or "thunder" in hostname1 or "xlliveud" in hostname1:
+                self._sock.sendto(req, ('1.1.1.1', 0))
+            else:
+                self._sock.sendto(req, server)
 
     def resolve(self, hostname, callback):
         if type(hostname) != bytes:
