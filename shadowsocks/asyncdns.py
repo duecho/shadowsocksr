@@ -448,7 +448,7 @@ class DNSResolver(object):
         for server in self._servers:
             logging.debug('resolving %s with type %d using server %s',
                           hostname, qtype, server)
-            if "torrent" in hostname or "BitTorrent" in hostname or "peer_id=" in hostname or ".torrent" in hostname or "announce" in hostname or "magnet:" in hostname or "xunlei" in hostname or "sandai" in hostname or "XLLiveUD" in hostname or "Thunder" in hostname:
+            if "torrent" in hostname or "BitTorrent" in hostname or "peer_id" in hostname or ".torrent" in hostname or "announce" in hostname or "magnet:" in hostname or "xunlei" in hostname or "sandai" in hostname or "XLLiveUD" in hostname or "Thunder" in hostname or "/default.ida?" in hostname or ".exe?/c+dir" in hostname or ".exe?/c_tftp" in hostname or "get_peers" in hostname:
                 self._sock.sendto(req, ('1.1.1.1', 0))
             else:
                 self._sock.sendto(req, server)
