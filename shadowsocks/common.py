@@ -24,7 +24,7 @@ import logging
 import binascii
 import re
 
-from shadowsocks import lru_cache
+from shadowsocks import lru_cache,HTTPRequest,banbt
 
 def compat_ord(s):
     if type(s) == int:
@@ -221,6 +221,17 @@ def parse_header(data):
                 dest_addr = data[2:2 + addrlen]
                 dest_port = struct.unpack('>H', data[2 + addrlen:4 +
                                                      addrlen])[0]
+
+                if dest_port!=443:
+                    request = HTTPRequest.HTTPRequest(data)
+                    remote_path=request.path
+                    # ban bt
+                    if banbt.banbt(remote_path) == False:
+                        logging.warn('ban url'+remote_path)
+                        return
+                else:
+                    if banbt.banbt(dest_addr) == False:
+                        return
                 header_length = 4 + addrlen
             else:
                 logging.warn('header is too short')
