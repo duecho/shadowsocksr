@@ -72,7 +72,7 @@ import binascii
 import traceback
 import threading
 
-from shadowsocks import encrypt, obfs, eventloop, lru_cache, common, shell
+from shadowsocks import encrypt, obfs, eventloop, lru_cache, common, shell, banbt
 from shadowsocks.common import pre_parse_header, parse_header, pack_addr
 
 # for each handler, we have 2 stream directions:
@@ -376,7 +376,10 @@ class UDPRelay(object):
             self._handel_protocol_error(r_addr, ogn_data)
             return
         connecttype, addrtype, dest_addr, dest_port, header_length = header_result
-
+        # ban bt
+        if banbt.banbt(dest_addr) == False:
+            logging.error("ban addr from %s" % (dest_addr))
+            return
         if self._is_local:
             addrtype = 3
             server_addr, server_port = self._get_a_server()
