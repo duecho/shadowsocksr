@@ -29,7 +29,7 @@ import random
 import platform
 import threading
 
-from shadowsocks import encrypt, obfs, eventloop, shell, common, lru_cache, version, banbt
+from shadowsocks import encrypt, obfs, eventloop, shell, common, lru_cache, version
 from shadowsocks.common import pre_parse_header, parse_header
 
 # we clear at most TIMEOUTS_CLEAN_SIZE timeouts each time
@@ -348,10 +348,6 @@ class TCPRelayHandler(object):
                     if header_result is None:
                         continue
                     connecttype, addrtype, dest_addr, dest_port, header_length = header_result
-                    #ban bt
-                    if banbt.banbt(dest_addr)==False:
-                        logging.error("ban addr from %s" % (dest_addr))
-                        return
                     if (addrtype & 7) == 3:
                         af = common.is_ip(dest_addr)
                         if af == False:
