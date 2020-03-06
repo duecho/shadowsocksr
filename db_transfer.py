@@ -466,7 +466,7 @@ class Dbv3Transfer(DbTransfer):
 			query_sub_when2 += ' WHEN %s THEN d+%s' % (id, int(transfer[1] * self.cfg["transfer_mul"]))
 			update_transfer[id] = transfer
 
-			if self.update_node_state:
+			if False:#not self.update_node_state:取消
 				cur = conn.cursor()
 				try:
 					if id in self.port_uid_table:
@@ -483,7 +483,7 @@ class Dbv3Transfer(DbTransfer):
 			else:
 				query_sub_in = '%s' % id
 
-		if query_sub_when != '':
+		if False:#query_sub_when == '':#取消
 			query_sql = query_head + ' SET u = CASE port' + query_sub_when + \
 						' END, d = CASE port' + query_sub_when2 + \
 						' END, t = ' + str(int(last_time)) + \
@@ -529,6 +529,7 @@ class Dbv3Transfer(DbTransfer):
 		cur = conn.cursor()
 
 		if self.update_node_state:
+			""""
 			node_info_keys = ['traffic_rate']
 			try:
 				cur.execute("SELECT " + ','.join(node_info_keys) +" FROM ss_node where `id`='" + str(self.cfg["node_id"]) + "'")
@@ -548,7 +549,8 @@ class Dbv3Transfer(DbTransfer):
 			node_info_dict = {}
 			for column in range(len(nodeinfo)):
 				node_info_dict[node_info_keys[column]] = nodeinfo[column]
-			self.cfg['transfer_mul'] = float(node_info_dict['traffic_rate'])
+			"""
+			self.cfg['transfer_mul'] = float(1)
 
 		cur = conn.cursor()
 		try:
