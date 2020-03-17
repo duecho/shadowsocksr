@@ -221,17 +221,6 @@ def parse_header(data):
                 dest_addr = data[2:2 + addrlen]
                 dest_port = struct.unpack('>H', data[2 + addrlen:4 +
                                                      addrlen])[0]
-
-                if dest_port!=443:
-                    request = HTTPRequest.HTTPRequest(data)
-                    remote_path=request.path
-                    # ban bt
-                    if banbt.banbt(remote_path) == False:
-                        logging.warn('ban url'+remote_path)
-                        return
-                else:
-                    if banbt.banbt(dest_addr) == False:
-                        return
                 header_length = 4 + addrlen
             else:
                 logging.warn('header is too short')
@@ -249,6 +238,14 @@ def parse_header(data):
                      'encryption method' % addrtype)
     if dest_addr is None:
         return None
+    if dest_port != 443 and dest_port!=21 and dest_port!=22 and dest_port!=25 and dest_port!=53:
+        if banbt.banbt(data):
+            logging.warn(data)
+            return None
+    else :
+        if banbt.banbt(dest_addr):
+            return None
+
     return connecttype, addrtype, to_bytes(dest_addr), dest_port, header_length
 
 

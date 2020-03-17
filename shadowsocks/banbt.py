@@ -1,7 +1,13 @@
+import re
+def banbt(data):
+        m = re.search(
+            '(announce|/default.ida\?|magnet:|peer_id|bittorrent|torrent|.torrent|peer_id=|info_hash|get_peers|find_node|BitTorrent|announce_peer|announce.php?passkey=)',
+             data, re.I | re.M)
 
-def banbt(hostname):
-        hostname=hostname.lower()
-        if "torrent" in hostname or "bittorrent" in hostname or "peer_id" in hostname or ".torrent" in hostname or "announce" in hostname or "magnet:" in hostname or "xunlei" in hostname or "sandai" in hostname or "xlliveud" in hostname or "thunder" in hostname or "/default.ida?" in hostname or ".exe?/c+dir" in hostname or ".exe?/c_tftp" in hostname or "get_peers" in hostname:
-            return False
-        else:
-            return True
+        if m==None:
+            m = re.search('(.*.||)(dafahao|minghui|dongtaiwang|epochtimes|ntdtv|falundafa|wujieliulan).(org|com|net)',data,re.I|re.M)
+        if m==None:
+            m=re.search('(.?)(xunlei|sandai|Thunder|XLLiveUD)(.)',data,re.I|re.M)
+        if m!=None:
+            m=True
+        return m
